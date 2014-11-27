@@ -1,0 +1,34 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.example.wanderxx.spotifytest"
+        minSdkVersion 14
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories{
+    mavenCentral()
+    flatDir{
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    compile files('libs/gson-2.3.jar')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.spotify.sdk:spotifysdk:1.0.0-beta4@aar'
+    compile fileTree(dir: 'lib', include: '*.jar')
+}

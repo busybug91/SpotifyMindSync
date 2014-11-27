@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTittle"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="60px"
+            android:textColor="#004F00" />
+        <TextView
+            android:id="@+id/sensorDataAttention"
+            android:text="@string/sensor_data_inital_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/sensorDataMeditation"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/sensorDataBlinkLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/sensorGenerate"
+            android:text="Generate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/sensorStop"
+            android:text="Stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Play Happy"
+            android:id="@+id/btnHappy"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Play Sad"
+            android:id="@+id/btnSad"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Mode"
+            android:id="@+id/btnModeChange"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/txtMeta"
+            android:layout_above="@+id/btnSad"
+            android:layout_toRightOf="@+id/txtTittle"
+            android:layout_toEndOf="@+id/txtTittle"
+            android:layout_marginBottom="54dp" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+        <TextView
+            android:text="@string/group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/txtTeam"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="50px"
+            android:textColor="#004F00"
+            />
+
+        <TextView
+            android:text="Members: Nitin Ahuja, Xiaoxuan Wang, Shin Yin, Yifei Chen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtMember"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="35px"
+            android:textColor="#004F00"/>
+    </LinearLayout>
+
+</RelativeLayout>

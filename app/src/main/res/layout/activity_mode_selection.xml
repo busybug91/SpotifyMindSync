@@ -1,0 +1,79 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.example.wanderxx.spotifytest.ModeSelectionActivity"
+    android:layout_centerVertical="true"
+    android:layout_centerInParent="true">
+
+    <TextView
+        android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtTittle"
+        android:layout_gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="60px"
+        android:textColor="#004F00" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simulation Mode"
+        android:id="@+id/btnSimulation"
+        android:layout_alignBottom="@+id/btnSimulation"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Real Mode"
+        android:id="@+id/btnReal"
+        android:layout_alignBottom="@+id/btnReal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+
+</LinearLayout>
+
+
+
+
+<LinearLayout
+android:orientation="vertical"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:layout_centerHorizontal="true"
+    >
+<TextView
+    android:text="@string/group_name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/txtTeam"
+    android:layout_gravity="center_horizontal"
+    android:textAlignment="center"
+    android:textSize="50px"
+    android:textColor="#004F00"
+    />
+
+<TextView
+    android:text="Members: Nitin Ahuja, Xiaoxuan Wang, Shin Yin, Yifei Chen"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/txtMember"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="center_horizontal"
+    android:textAlignment="center"
+    android:textSize="35px"
+    android:textColor="#004F00"/>
+</LinearLayout>
+
+</RelativeLayout>

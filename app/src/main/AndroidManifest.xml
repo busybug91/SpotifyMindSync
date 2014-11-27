@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.wanderxx.spotifytest" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="com.example.wanderxx.spotifytest" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.wanderxx.neurosky.HelloEEGActivity"
+            android:label="@string/app_name" >
+        </activity>
+
+        <activity
+            android:name=".RealModeActivity"
+            android:label="@string/title_activity_real_mode" >
+        </activity>
+        <activity
+            android:name=".ModeSelectionActivity"
+            android:label="@string/title_activity_mode_selection" >
+        </activity>
+        <activity
+            android:name=".GroupActivity"
+            android:label="@string/app_name" >
+
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

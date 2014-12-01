@@ -38,8 +38,11 @@ public class MainActivity extends Activity implements
     private static final String REDIRECT_URI = "com.example.wanderxx.spotifytest://callback";
 
     private Player mPlayer;
-
     private LongOperation lop;
+    final Activity thisact=this;
+
+    public Button btnhappy;
+    public Button btnsad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,19 +68,7 @@ public class MainActivity extends Activity implements
                 //     stopButton.setActivated(false);
             }
         });
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                generateButton.setEnabled(true);
-                stopButton.setEnabled(false);
-                timer.cancel();
-                timer.purge();
-                timer=null;
-                sensorDataAttentionView.setText(getString(R.string.sensor_data_inital_text));
-                sensorDataBlinkLevelView.setText("");
-                sensorDataMeditationView.setText("");
-            }
-        });
+
         SpotifyAuthentication.openAuthWindow(CLIENT_ID, "token", REDIRECT_URI,
                 new String[]{"user-read-private", "streaming"}, null, this);
     }
@@ -104,8 +95,6 @@ public class MainActivity extends Activity implements
                 }
             });
 
-            final Activity thisact=this;
-
             Button btnChangeMode= (Button)findViewById(R.id.btnModeChange);
             btnChangeMode.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,7 +106,7 @@ public class MainActivity extends Activity implements
                 }
             });
 
-            Button btnhappy = (Button) findViewById(R.id.btnHappy);
+            btnhappy = (Button) findViewById(R.id.btnHappy);
             btnhappy.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                    // mPlayer.pause();
@@ -131,7 +120,7 @@ public class MainActivity extends Activity implements
                 }
             });
 
-            Button btnsad = (Button) findViewById(R.id.btnSad);
+            btnsad = (Button) findViewById(R.id.btnSad);
             btnsad.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                    // mPlayer.pause();
@@ -142,6 +131,21 @@ public class MainActivity extends Activity implements
                     lop.execute("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                    // ShowMeta("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
 
+                }
+            });
+
+            stopButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    generateButton.setEnabled(true);
+                    stopButton.setEnabled(false);
+                    timer.cancel();
+                    timer.purge();
+                    timer=null;
+                    mPlayer.pause();
+                    sensorDataAttentionView.setText(getString(R.string.sensor_data_inital_text));
+                    sensorDataBlinkLevelView.setText("");
+                    sensorDataMeditationView.setText("");
                 }
             });
 
@@ -189,7 +193,20 @@ public class MainActivity extends Activity implements
         super.onDestroy();
     }
 
+    public void playMode(int medi){
+        if (medi>=50){
+            btnhappy.callOnClick();
+        }
+        else{
+            btnsad.callOnClick();
+        }
+    }
+
+
     class UpdateViewTimerTask extends TimerTask {
+        int last=-1;
+        int count=0;
+        boolean lastHappy;
         @Override
         public void run() {
 
@@ -207,6 +224,40 @@ public class MainActivity extends Activity implements
                 @Override
                 public void run() {
                     sensorDataMeditationView.setText("Meditation: "+ Integer.toString(data[1]));
+                    if(last==-1) {
+                        btnhappy.callOnClick();
+                        lastHappy=true;
+                    }
+                    if(data[1]>=50){
+
+                        if(last>=50){
+                            count++;
+                        }else{
+                            count=1;
+                        }
+                        last=data[1];
+                        if(count==3 && !lastHappy){
+                            Log.d("playhappy",count+"times >50");
+                            count=1;
+                            lastHappy=true;
+                            btnhappy.callOnClick();
+                        }
+                    }
+                    else{
+                        if(last<50){
+                            count++;
+                        }else{
+                            count=1;
+                        }
+                        last=data[1];
+                        if(count==3 && lastHappy) {
+                            Log.d("playsad",count+"times <50");
+                            count=1;
+                            lastHappy=false;
+                            btnsad.callOnClick();
+                        }
+                    }
+
                 }
             });
             Log.e("Main Activity", Integer.toString(data[2]));

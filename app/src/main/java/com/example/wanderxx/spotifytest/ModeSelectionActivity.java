@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.example.wanderxx.neurosky.HelloEEGActivity;
 
 public class ModeSelectionActivity extends Activity {
 
@@ -14,6 +17,7 @@ public class ModeSelectionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mode_selection);
+        Toast.makeText(this, "This is a toast", Toast.LENGTH_SHORT).show();
         Button btnSimulation=(Button)findViewById(R.id.btnSimulation);
         btnSimulation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +33,15 @@ public class ModeSelectionActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(ModeSelectionActivity.this, RealModeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button btnLiveMode=(Button)findViewById(R.id.btnLive);
+        btnLiveMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(ModeSelectionActivity.this, HelloEEGActivity.class);
                 startActivity(intent);
             }
         });

@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-
-
+import android.widget.Toast;
 
 
 public class GroupActivity extends Activity {
@@ -17,6 +16,8 @@ public class GroupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
+        Toast.makeText(this, "This is a toast in group main", Toast.LENGTH_SHORT).show();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

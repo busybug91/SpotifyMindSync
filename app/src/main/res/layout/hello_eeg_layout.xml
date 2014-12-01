@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="com.example.wanderxx.neurosky.HelloEEGActivity">
+
+        <TextView
+            android:text="@string/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTittle"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="60px"
+            android:textColor="#004F00" />
+
+
+        <ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1" android:fadeScrollbars="true" android:scrollbars="vertical" android:layout_height="wrap_content" android:layout_weight="1.00">
+            <TextView android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:text="Click connect to start."
+                android:layout_height="fill_parent" />
+
+        </ScrollView>
+        <Button android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button1"
+            android:text="Connect"
+            android:onClick="doStuff">
+
+        </Button>
+
+        <Button
+            android:id="@+id/sensorStop"
+            android:text="Stop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textOn="Blink Flipping On"
+            android:textOff="Blink Flipping Off"
+            android:id="@+id/btnBlinkFlip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Mode"
+            android:id="@+id/btnModeChange"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/txtMeta"
+            android:layout_marginBottom="54dp" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+        <TextView
+            android:text="@string/group_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/txtTeam"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="50px"
+            android:textColor="#004F00"
+            />
+
+        <TextView
+            android:text="Members: Nitin Ahuja, Xiaoxuan Wang, Shin Yin, Yifei Chen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtMember"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:textSize="35px"
+            android:textColor="#004F00"/>
+    </LinearLayout>
+
+</RelativeLayout>

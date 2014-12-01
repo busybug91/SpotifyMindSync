@@ -2,8 +2,6 @@ package com.example.wanderxx.neurosky;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,25 +9,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import com.example.wanderxx.spotifytest.MainActivity;
 import com.example.wanderxx.spotifytest.R;
 import com.neurosky.thinkgear.TGDevice;
 
 public class HelloEEGActivity extends Activity {
 	BluetoothAdapter bluetoothAdapter;
-	
+	boolean blinkDetection=false;
 	TextView tv;
 	Button b;
 	
 	TGDevice tgDevice;
 	final boolean rawEnabled = false;
 	
-  //   Called when the activity is first created.
+    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.hello_eeg_layout);
         tv = (TextView)findViewById(R.id.textView1);
         tv.setText("");
         tv.append("Android version: " + Integer.valueOf(android.os.Build.VERSION.SDK) + "\n" );
@@ -40,20 +38,24 @@ public class HelloEEGActivity extends Activity {
         	finish();
         	return;
         }else {
-        	// create the TGDevice
+        	/* create the TGDevice */
         	tgDevice = new TGDevice(bluetoothAdapter, handler);
         }
-
-        Button button2= (Button) this.findViewById(R.id.button2);
-        final Context context=this;
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent= new Intent(context, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+        final ToggleButton blinkFlipButton = (ToggleButton) findViewById(R.id.btnBlinkFlip);
+        blinkFlipButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(blinkFlipButton.isChecked())
+                        {
+                            blinkDetection = true;
+                        }
+                        else{
+                            blinkDetection = false;
+                        }
+                    }
+                }
+        );
     }
     
     @Override
@@ -61,9 +63,9 @@ public class HelloEEGActivity extends Activity {
     	tgDevice.close();
         super.onDestroy();
     }
-    //
-     // Handles messages from TGDevice
-     //
+    /**
+     * Handles messages from TGDevice
+     */
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

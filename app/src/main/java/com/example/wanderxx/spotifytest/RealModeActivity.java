@@ -1,15 +1,19 @@
 package com.example.wanderxx.spotifytest;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.wanderxx.neurosky.NeuroskyUtility;
+import com.neurosky.thinkgear.TGDevice;
 import com.spotify.sdk.android.Spotify;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import com.spotify.sdk.android.authentication.SpotifyAuthentication;
@@ -18,8 +22,6 @@ import com.spotify.sdk.android.playback.Player;
 import com.spotify.sdk.android.playback.PlayerNotificationCallback;
 import com.spotify.sdk.android.playback.PlayerState;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RealModeActivity extends Activity implements  PlayerNotificationCallback, ConnectionStateCallback
 
@@ -27,11 +29,13 @@ public class RealModeActivity extends Activity implements  PlayerNotificationCal
         TextView sensorDataAttentionView;
         TextView sensorDataMeditationView;
         TextView sensorDataBlinkLevelView;
-        Button generateButton;
         Button stopButton;
-        Timer timer;
+        BluetoothAdapter bluetoothAdapter;
 
-        NeuroskyUtility neuroskyUtility=null;
+        TGDevice tgDevice;
+        final boolean rawEnabled = false;
+
+
         // TODO: Replace with your client ID
         private static final String CLIENT_ID = "ca8d24ae219744a49f10ac5dedff74df";
         // TODO: Replace with your redirect URI
@@ -40,44 +44,48 @@ public class RealModeActivity extends Activity implements  PlayerNotificationCal
         private Player mPlayer;
 
         private LongOperation lop;
+        final Activity thisact=this;
+
+        public Button btnhappy;
+        public Button btnsad;
+
+        public int last=-1;
+        public int count=0;
+        public boolean lastHappy;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        neuroskyUtility= NeuroskyUtility.getInstance();
-
         sensorDataBlinkLevelView=(TextView) findViewById(R.id.sensorDataBlinkLevel);
         sensorDataMeditationView=(TextView) findViewById(R.id.sensorDataMeditation);
         sensorDataAttentionView= (TextView) findViewById(R.id.sensorDataAttention);
-        generateButton = (Button)findViewById(R.id.sensorGenerate);
+
         stopButton = (Button)findViewById(R.id.sensorStop);
         stopButton.setEnabled(false);
 
-        generateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timer= new Timer();
-                stopButton.setEnabled(true);
-                generateButton.setEnabled(false);
-                UpdateViewTimerTask updateViewTimerTask = new UpdateViewTimerTask();
-                timer.schedule(updateViewTimerTask,1000,1200);
-                //     stopButton.setActivated(false);
-            }
-        });
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateButton.setEnabled(true);
                 stopButton.setEnabled(false);
-                timer.cancel();
-                timer.purge();
-                timer=null;
                 sensorDataAttentionView.setText(getString(R.string.sensor_data_inital_text));
                 sensorDataBlinkLevelView.setText("");
                 sensorDataMeditationView.setText("");
             }
         });
+
+        if(bluetoothAdapter == null) {
+            // Alert user that Bluetooth is not available
+            Toast.makeText(this, "Bluetooth not available", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }else {
+        /* create the TGDevice */
+            tgDevice = new TGDevice(bluetoothAdapter, handler);
+        }
+
+
         SpotifyAuthentication.openAuthWindow(CLIENT_ID, "token", REDIRECT_URI,
                 new String[]{"user-read-private", "streaming"}, null, this);
     }
@@ -104,10 +112,7 @@ public class RealModeActivity extends Activity implements  PlayerNotificationCal
                 }
             });
 
-            final Activity thisact=this;
-
-
-            Button btnhappy = (Button) findViewById(R.id.btnHappy);
+            btnhappy = (Button) findViewById(R.id.btnHappy);
             btnhappy.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // mPlayer.pause();
@@ -133,7 +138,7 @@ public class RealModeActivity extends Activity implements  PlayerNotificationCal
 
                 }
             });
-            Button btnsad = (Button) findViewById(R.id.btnSad);
+            btnsad = (Button) findViewById(R.id.btnSad);
             btnsad.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // mPlayer.pause();
@@ -192,36 +197,114 @@ public class RealModeActivity extends Activity implements  PlayerNotificationCal
         super.onDestroy();
     }
 
-        class UpdateViewTimerTask extends TimerTask {
-            @Override
-            public void run() {
+    private final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case TGDevice.MSG_STATE_CHANGE:
 
-                final int data[] = neuroskyUtility.randNeuroskyData();
-                Log.e("Main Activity", Integer.toString(data[0]));
-                sensorDataAttentionView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sensorDataAttentionView.setText("Attention: "+ Integer.toString(data[0]));
+                    switch (msg.arg1) {
+                        case TGDevice.STATE_IDLE:
+                            break;
+                        case TGDevice.STATE_CONNECTING:
+                            Toast.makeText(thisact, "Connecting...\n", Toast.LENGTH_SHORT).show();
+                            break;
+                        case TGDevice.STATE_CONNECTED:
+                            Toast.makeText(thisact, "Connected.\n", Toast.LENGTH_SHORT).show();
+                            tgDevice.start();
+                            break;
+                        case TGDevice.STATE_NOT_FOUND:
+                            Toast.makeText(thisact, "Can't find\n", Toast.LENGTH_SHORT).show();
+                            break;
+                        case TGDevice.STATE_NOT_PAIRED:
+                            Toast.makeText(thisact, "not paired\n", Toast.LENGTH_SHORT).show();
+                            break;
+                        case TGDevice.STATE_DISCONNECTED:
+                            Toast.makeText(thisact, "Disconnected mang\n", Toast.LENGTH_SHORT).show();
+
                     }
-                });
-                Log.e("Main Activity", Integer.toString(data[1]));
 
-                sensorDataMeditationView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sensorDataMeditationView.setText("Meditation: "+ Integer.toString(data[1]));
+                    break;
+                case TGDevice.MSG_POOR_SIGNAL:
+                    //signal = msg.arg1;
+                   // tv.append("PoorSignal: " + msg.arg1 + "\n");
+                    break;
+                case TGDevice.MSG_RAW_DATA:
+                    //raw1 = msg.arg1;
+                    //tv.append("Got raw: " + msg.arg1 + "\n");
+                    break;
+                case TGDevice.MSG_HEART_RATE:
+                   // tv.append("Heart rate: " + msg.arg1 + "\n");
+                    break;
+                case TGDevice.MSG_ATTENTION:
+                    //att = msg.arg1;
+                   // tv.append("Attention: " + msg.arg1 + "\n");
+                    //Log.v("HelloA", "Attention: " + att + "\n");
+                    sensorDataAttentionView.setText("Attention: "+ msg.arg1 + "\n");
+
+                    break;
+                case TGDevice.MSG_MEDITATION:
+                    sensorDataMeditationView.setText("Meditation: "+ msg.arg1 + "\n");
+
+                    if(last==-1) {
+                        btnhappy.callOnClick();
+                        lastHappy=true;
                     }
-                });
-                Log.e("Main Activity", Integer.toString(data[2]));
+                    if(msg.arg1>=50){
 
-                sensorDataBlinkLevelView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        sensorDataBlinkLevelView.setText("Blink Level: "+ Integer.toString(data[2]));
+                        if(last>=50){
+                            count++;
+                        }else{
+                            count=1;
+                        }
+                        last=msg.arg1;
+                        if(count==3 && !lastHappy){
+                            Log.d("playhappy",count+"times >50");
+                            count=1;
+                            lastHappy=true;
+                            btnhappy.callOnClick();
+                        }
                     }
-                });
+                    else{
+                        if(last<50){
+                            count++;
+                        }else{
+                            count=1;
+                        }
+                        last=msg.arg1;
+                        if(count==3 && lastHappy) {
+                            Log.d("playsad",count+"times <50");
+                            count=1;
+                            lastHappy=false;
+                            btnsad.callOnClick();
+                        }
+                    }
 
+                    break;
+
+                case TGDevice.MSG_BLINK:
+                    sensorDataBlinkLevelView.setText("Blink Level: "+  msg.arg1 + "\n");
+                   // tv.append("Blink: " + msg.arg1 + "\n");
+                    break;
+                case TGDevice.MSG_RAW_COUNT:
+                    //tv.append("Raw Count: " + msg.arg1 + "\n");
+                    break;
+                case TGDevice.MSG_LOW_BATTERY:
+                    Toast.makeText(getApplicationContext(), "Low battery!", Toast.LENGTH_SHORT).show();
+                    break;
+                case TGDevice.MSG_RAW_MULTI:
+                    //TGRawMulti rawM = (TGRawMulti)msg.obj;
+                    //tv.append("Raw1: " + rawM.ch1 + "\nRaw2: " + rawM.ch2);
+                default:
+                    break;
             }
         }
+    };
+
+    public void doStuff(View view) {
+        if(tgDevice.getState() != TGDevice.STATE_CONNECTING && tgDevice.getState() != TGDevice.STATE_CONNECTED)
+            tgDevice.connect(rawEnabled);
+        //tgDevice.ena
+    }
 
 }

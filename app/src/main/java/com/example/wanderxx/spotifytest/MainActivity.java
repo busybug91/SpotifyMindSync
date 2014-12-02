@@ -43,6 +43,18 @@ public class MainActivity extends Activity implements
 
     public Button btnhappy;
     public Button btnsad;
+
+    String[] happylist={"spotify:track:1j2sRZpFUzG6wPJGfRvet3",
+            "spotify:track:4kgsK0fftHtg9gZOzkU5T2",
+            "spotify:track:0ifSeVGUr7py5GggttDhXw",
+            "spotify:track:3F3Ggfzm4DwDB42xJOrB2L",
+            "spotify:track:6NmXV4o6bmp704aPGyTVVG"};
+    String[] sadlist={"spotify:track:7rJLjgqq5rmHxWitapy0me",
+            "spotify:track:0sGNcx6lfc3zrbiIOxY4vb",
+            "spotify:track:6HJujxcjMmVZhd8z5EpPri",
+            "spotify:track:51pQ7vY7WXzxskwloaeqyj",
+            "spotify:track:2TpxZ7JUBn3uw46aR7qd6V"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +124,8 @@ public class MainActivity extends Activity implements
                    // mPlayer.pause();
                     mPlayer.addConnectionStateCallback(MainActivity.this);
                     mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                    mPlayer.play("spotify:track:6NmXV4o6bmp704aPGyTVVG");
+                    String song=happylist[(int)(Math.random()*5)];
+                    mPlayer.play(song);
                     lop=new LongOperation(thisact);
                     lop.execute("spotify:track:6NmXV4o6bmp704aPGyTVVG");
                  //   ShowMeta("spotify:track:6NmXV4o6bmp704aPGyTVVG");
@@ -126,7 +139,8 @@ public class MainActivity extends Activity implements
                    // mPlayer.pause();
                     mPlayer.addConnectionStateCallback(MainActivity.this);
                     mPlayer.addPlayerNotificationCallback(MainActivity.this);
-                    mPlayer.play("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
+                    String song=sadlist[(int)(Math.random()*5)];
+                    mPlayer.play(song);
                     lop=new LongOperation(thisact);
                     lop.execute("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");
                    // ShowMeta("spotify:track:2TpxZ7JUBn3uw46aR7qd6V");

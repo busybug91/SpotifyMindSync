@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -19,6 +20,9 @@ public class HelloEEGActivity extends Activity {
 	boolean blinkDetection=false;
 	TextView tv;
 	Button b;
+    ScrollView sv;
+
+
 	
 	TGDevice tgDevice;
 	final boolean rawEnabled = false;
@@ -32,6 +36,16 @@ public class HelloEEGActivity extends Activity {
         tv.setText("");
         tv.append("Android version: " + Integer.valueOf(android.os.Build.VERSION.SDK) + "\n" );
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        sv=(ScrollView) findViewById(R.id.scrollView1);
+        final Button connectBtn=(Button)findViewById(R.id.btnConnect);
+        connectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                doStuff(connectBtn);
+            }
+        });
+
         if(bluetoothAdapter == null) {
         	// Alert user that Bluetooth is not available
         	Toast.makeText(this, "Bluetooth not available", Toast.LENGTH_LONG).show();
@@ -69,6 +83,7 @@ public class HelloEEGActivity extends Activity {
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            sv.fullScroll(tv.FOCUS_DOWN);
         	switch (msg.what) {
             case TGDevice.MSG_STATE_CHANGE:
 
@@ -99,7 +114,7 @@ public class HelloEEGActivity extends Activity {
                 break;
             case TGDevice.MSG_RAW_DATA:	  
             		//raw1 = msg.arg1;
-            		//tv.append("Got raw: " + msg.arg1 + "\n");
+            		tv.append("Got raw: " + msg.arg1 + "\n");
             	break;
             case TGDevice.MSG_HEART_RATE:
         		tv.append("Heart rate: " + msg.arg1 + "\n");
@@ -110,8 +125,9 @@ public class HelloEEGActivity extends Activity {
             		//Log.v("HelloA", "Attention: " + att + "\n");
             	break;
             case TGDevice.MSG_MEDITATION:
+                tv.append("Medition: " + msg.arg1 + "\n");
+                break;
 
-            	break;
             case TGDevice.MSG_BLINK:
             		tv.append("Blink: " + msg.arg1 + "\n");
             	break;
